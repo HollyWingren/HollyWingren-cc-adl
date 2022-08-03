@@ -11,7 +11,7 @@
 
     // The URL or local path of the source code repository for the
     // project being benchmarked
-    "repo": "https://github.com/iris-hep/func_adl_uproot.git",
+    "repo": "https://github.com/iris-hep/func_adl_servicex.git",
 
     // The Python project's subdirectory in your repo.  If missing or
     // the empty string, the project is assumed to be located at the root
@@ -84,15 +84,11 @@
     // new environments.  A value of ``null`` means that the variable
     // will not be set for the current combination.
     //
-    // "matrix": {
-    //     "req": {
-    //         "numpy": ["1.6", "1.7"],
-    //         "six": ["", null],  // test with and without six installed
-    //         "pip+emcee": [""]   // emcee is only available for install with pip.
-    //     },
-    //     "env": {"ENV_VAR_1": ["val1", "val2"]},
-    //     "env_nobuild": {"ENV_VAR_2": ["val3", null]},
-    // },
+    "matrix": {
+         "req": {
+             "matplotlib": [],
+         },
+    },
 
     // Combinations of libraries/python versions can be excluded/included
     // from the set to test. Each entry is a dictionary containing additional
@@ -136,7 +132,7 @@
 
     // The directory (relative to the current directory) that benchmarks are
     // stored in.  If not provided, defaults to "benchmarks"
-    // "benchmark_dir": "benchmarks",
+    "benchmark_dir": "benchmarks",
 
     // The directory (relative to the current directory) to cache the Python
     // environments in.  If not provided, defaults to "env"
