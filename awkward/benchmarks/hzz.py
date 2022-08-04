@@ -4,6 +4,8 @@ import hist
 
 import awkward as ak   # version 1
 import vector
+import wget
+import ssl
 vector.register_awkward()
 
 
@@ -12,7 +14,9 @@ class HZZSuite:
     timeout = 3600 
     
     def setup(self):
-        raw_data = ak.from_parquet("https://raw.githubusercontent.com/jpivarski-talks/2022-08-03-codas-hep-columnar-tutorial/main/data/SMHiggsToZZTo4L.parquet")
+        ssl._create_default_https_context = ssl._create_unverified_context
+        file_name = wget.download("https://raw.githubusercontent.com/jpivarski-talks/2022-08-03-codas-hep-columnar-tutorial/main/data/SMHiggsToZZTo4L.parquet", "SMHiggsToZZTo4L.parquet")
+        raw_data = ak.from_parquet(file_name)
         {field_name: raw_data[field_name].type for field_name in raw_data.fields}
         self.events = ak.zip({
     "PV": ak.zip({
@@ -46,15 +50,15 @@ class HZZSuite:
 
     def time_servicex_q1(self):
         first_muons, second_muons = (
-    self.events.muons[ak.num(events.muons) >= 2, 0],
-    self.events.muons[ak.num(events.muons) >= 2, 1],
+    self.events.muons[ak.num(self.events.muons) >= 2, 0],
+    self.events.muons[ak.num(self.events.muons) >= 2, 1],
         )
         hist.Hist.new.Regular(100, 0, 150).Double().fill((first_muons + second_muons).mass).plot();
 
     def peakmem_servicex_q1(self):
         first_muons, second_muons = (
-    self.events.muons[ak.num(events.muons) >= 2, 0],
-    self.events.muons[ak.num(events.muons) >= 2, 1],
+    self.events.muons[ak.num(self.events.muons) >= 2, 0],
+    self.events.muons[ak.num(self.events.muons) >= 2, 1],
         )
         hist.Hist.new.Regular(100, 0, 150).Double().fill((first_muons + second_muons).mass).plot();
 
