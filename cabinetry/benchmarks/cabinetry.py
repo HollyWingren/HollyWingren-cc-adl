@@ -1,6 +1,7 @@
 import cabinetry
 import numpy as np
 import uproot
+import wget
 
 
 def toy_distribution(noncentral, multiplier, offset, num_events):
@@ -187,11 +188,80 @@ class Q1Suite:
                 }
             ],
         }
+        
+        file_name = wget.download("https://github.com/cabinetry/cabinetry-tutorials/blob/master/inputs/histograms.root?raw=true", "histograms.root")
+
+        self.cabinetry_config_histograms = {
+            "General": {
+                "Measurement": "minimal_example",
+                "POI": "Signal_norm",
+                "HistogramFolder": "histograms/",
+                "InputPath": "histograms.root:{RegionPath}/{SamplePath}/{VariationPath}",
+                "VariationPath": "Nominal",
+            },
+            "Regions": [
+                {
+                    "Name": "Signal_region",
+                    "RegionPath": "SR",
+                }
+            ],
+            "Samples": [
+                {
+                    "Name": "Data",
+                    "SamplePath": "Data",
+                    "Data": True,
+                },
+                {
+                    "Name": "Signal",
+                    "SamplePath": "Signal",
+                },
+                {
+                    "Name": "Background",
+                    "SamplePath": "Background",
+                },
+            ],
+            "Systematics": [
+                {
+                    "Name": "Luminosity",
+                    "Up": {"Normalization": 0.05},
+                    "Down": {"Normalization": -0.05},
+                    "Type": "Normalization",
+                },
+                {
+                    "Name": "Modeling",
+                    "Up": {"VariationPath": "Modeling_Up"},
+                    "Down": {"Symmetrize": True},
+                    "Samples": "Background",
+                    "Type": "NormPlusShape",
+                },
+                {
+                    "Name": "WeightBasedModeling",
+                    "Up": {"VariationPath": "WeightBasedModeling_Up"},
+                    "Down": {"VariationPath": "WeightBasedModeling_Down"},
+                    "Samples": "Background",
+                    "Type": "NormPlusShape",
+                },
+            ],
+            "NormFactors": [
+                {
+                    "Name": "Signal_norm",
+                    "Samples": "Signal",
+                    "Nominal": 1,
+                    "Bounds": [0, 10],
+                }
+            ],
+        }
 
         create_input_ntuples()
 
     def time_build_template(self):
         cabinetry.templates.build(self.cabinetry_config, method="uproot")
-
-    def time_build_template(self):
+    def time_build_template_postprocess(self):
         cabinetry.templates.build(self.cabinetry_config, method="uproot")
+        cabinetry.templates.postprocess(self.cabinetry_config)
+        
+    def time_read_histograms(self):
+        cabinetry.templates.collect(self.cabinetry_config_histograms, method="uproot")
+    def time_read_histograms_postprocess(self):
+        cabinetry.templates.collect(self.cabinetry_config_histograms, method="uproot")
+        cabinetry.templates.postprocess(self.cabinetry_config)
