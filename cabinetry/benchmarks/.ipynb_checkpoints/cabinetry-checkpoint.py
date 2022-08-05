@@ -253,26 +253,36 @@ class Q1Suite:
         }
 
         create_input_ntuples()
-
+        
+        cabinetry.templates.collect(self.cabinetry_config_histograms, method="uproot")
+        cabinetry.templates.postprocess(self.cabinetry_config)
+        workspace_path = "workspaces/example_workspace.json"
+        self.ws = cabinetry.workspace.build(self.cabinetry_config)
+        cabinetry.workspace.save(self.ws, workspace_path)
+        bws = cabinetry.workspace.load(workspace_path)
+        self.model, self.data = cabinetry.model_utils.model_and_data(self.ws)
+                
     def time_build_template(self):
         cabinetry.templates.build(self.cabinetry_config, method="uproot")
     def time_build_template_postprocess(self):
         cabinetry.templates.build(self.cabinetry_config, method="uproot")
         cabinetry.templates.postprocess(self.cabinetry_config)
-        
+    
     def time_read_histograms(self):
         cabinetry.templates.collect(self.cabinetry_config_histograms, method="uproot")
     def time_read_histograms_postprocess(self):
         cabinetry.templates.collect(self.cabinetry_config_histograms, method="uproot")
         cabinetry.templates.postprocess(self.cabinetry_config)
-        
+    
     def time_workspace_build(self):
         workspace_path = "workspaces/example_workspace.json"
-        ws = cabinetry.workspace.build(self.cabinetry_config)
-        cabinetry.workspace.save(ws, workspace_path)
+        cabinetry.workspace.save(self.ws, workspace_path)
     
-    def time_workspace_load(self):
-        bws = cabinetry.workspace.load(workspace_path)
-        model, data = cabinetry.model_utils.model_and_data(ws)
-        fit_results = cabinetry.fit.fit(model, data)
-        
+    def time_workspace_fitting(self):
+        fit_results = cabinetry.fit.fit(self.model, self.data)
+    
+    def time_workspace_limit_fitting(self):
+        limit_results = cabinetry.fit.limit(self.model,self.data)
+       
+    def time_model_prediction(self):
+        model_pred = cabinetry.model_utils.prediction(self.model)
