@@ -271,7 +271,7 @@ class Q1Suite:
         ws = cabinetry.workspace.build(self.cabinetry_config)
         cabinetry.workspace.save(ws, workspace_path)
     
-    def time_workspace_fitting(self):
+    def time_workspace_load(self):
         bws = cabinetry.workspace.load(workspace_path)
         model, data = cabinetry.model_utils.model_and_data(ws)
         fit_results = cabinetry.fit.fit(model, data)
