@@ -286,3 +286,9 @@ class Q1Suite:
        
     def time_model_prediction(self):
         model_pred = cabinetry.model_utils.prediction(self.model)
+        
+    def ranking_nuisance_parameters(self):
+        ranking_results = cabinetry.fit.ranking(self.model, self.data)
+    
+    def likelihood_scans(self):
+        scan_results = cabinetry.fit.scan(self.model, self.data)
