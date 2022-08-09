@@ -292,3 +292,6 @@ class Q1Suite:
     
     def time_likelihood_scans(self):
         scan_results = cabinetry.fit.scan(self.model, self.data, "WeightBasedModeling")
+        
+    def time_discovery_significance(self):
+        significance_results = cabinetry.fit.significance(self.model, self.data)
