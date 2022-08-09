@@ -7,7 +7,7 @@
     "project": "func_adl",
 
     // The project's homepage
-    "project_url": "http://project-homepage.org/",
+    "project_url": "https://github.com/iris-hep/func_adl_uproot.git",
 
     // The URL or local path of the source code repository for the
     // project being benchmarked
@@ -30,7 +30,7 @@
 
     // List of branches to benchmark. If not provided, defaults to "master"
     // (for git) or "default" (for mercurial).
-    // "branches": ["master"], // for git
+     "branches": ["master", "2f82267", "ac39e6d", "383ab45", "97b8f57", "8faaed9", "9e235d4", "3dfdcd5"], // for git
     // "branches": ["default"],    // for mercurial
 
     // The DVCS being used.  If not set, it will be automatically
